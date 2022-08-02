@@ -12,11 +12,26 @@ sudo apt-get update -y
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -aG docker $USER
 docker --version
-
-# Docker compose
-sudo curl -L https://github.com/docker/compose/releases/download/1.26.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-# make it executable
-sudo chmod +x /usr/local/bin/docker-compose
-# check version
-docker-compose --version
 ``` 
+
+## Atualize o SCRIPT de criação do BD
+
+Atualize o seguinte script com as instruções apropriadas para criar seu BD ```maria/sql-scripts/CreateTable.sql```.
+
+## Construa imgs docker e inicie o container do BD e da API
+
+```bash
+#MARIA DB
+cd maria
+sudo docker build -t maria .
+
+export DB_PASSWORD=edu123
+sudo docker run -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD maria
+
+# API
+cd api
+sudo docker build -t api-maria .
+
+export MARIA_IP=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(sudo docker ps | grep maria | cut -f 1 -d ' '))
+sudo docker run -e FLASK_APP=api-maria.py -e DB_HOST=$MARIA_IP -e DB_NAME=testeindexacao -e DB_USER=root -e DB_PASSWORD=edu123 api-maria:latest
+```
