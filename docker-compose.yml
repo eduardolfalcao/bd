@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  flask-api:
+    build: api
+    container_name: flask-api
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      FLASK_APP: ${FLASK_APP}
+    depends_on:
+      - mariadb
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - flask-api-network
+      
+  mariadb:
+    image: mariadb:10.5
+    container_name: mariadb
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_DATABASE: ${DB_NAME}
+    volumes:
+      - ./mysql/iot_sensor_db:/home/ubuntu/bd/maria/sql-script/CreateTable.sql
+      - dbvolume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - flask-api-network
+    restart: unless-stopped
+
+networks:
+  flask-api-network:
+    driver: bridge
+
+volumes:
+  dbvolume:

@@ -1,0 +1,29 @@
+CREATE DATABASE IF NOT EXISTS iot_sensor;
+USE iot_sensor;
+
+CREATE TABLE IF NOT EXISTS PeopleCount(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	value SMALLINT NOT NULL,
+	collector_id VARCHAR(255) NOT NULL,
+	timestamp INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS People(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Recognized(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	collector_id VARCHAR(255) NOT NULL,
+	timestamp INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS PeopleRecognized(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	id_recognized INT NOT NULL, 
+	id_people INT NOT NULL,
+	FOREIGN KEY (id_recognized) REFERENCES Recognized(id),
+	FOREIGN KEY (id_people) REFERENCES People(id)
+);
+
