@@ -29,7 +29,7 @@ services:
       MARIADB_USER: ${DB_USER}
       MARIADB_DATABASE: ${DB_NAME}
     volumes:
-      - ./mysql/iot_sensor_db:/home/ubuntu/bd/maria/sql-script/CreateTable.sql
+      - /home/ubuntu/bd/maria/sql-script/CreateTable.sql:/docker-entrypoint-initdb.d/dump.sql
       - dbvolume:/var/lib/mysql
     ports:
       - "3306:3306"
