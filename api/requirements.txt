@@ -1,2 +1,3 @@
 flask 
-mysql-connector-python
+Flask-JWT-Extended
+#mysql-connector-python

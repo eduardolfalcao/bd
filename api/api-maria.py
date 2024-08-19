@@ -128,3 +128,6 @@ def run_select_query(query):
         if connection.is_connected():
             connection.close()
     return json.dumps(res)
+
+if __name__ == '__main__':
+    app.run(port=8080)
